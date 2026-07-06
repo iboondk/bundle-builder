@@ -13,14 +13,23 @@ npm install
 npm run dev
 ```
 
-Open **http://localhost:5173**.
+Open **http://localhost:5173**. `npm run dev` starts both the Vite client and the
+API server (see [Backend / API](#backend--api-bonus)); Vite proxies `/api` to it.
+
+**Production build (single full-stack process):**
+
+```bash
+npm run build     # client → dist/
+npm start         # Express serves the API + built dist/ on http://localhost:3001
+```
 
 ## Scripts
 
 | Command | Does |
 |---------|------|
-| `npm run dev` | Start Vite dev server on port 5173 |
+| `npm run dev` | Start the client (5173) **and** the API server (3001) together |
 | `npm run build` | Type-check + production build → `dist/` |
+| `npm start` | Production server: API + built SPA on port 3001 |
 | `npm run typecheck` | `tsc --noEmit` (strict TypeScript) |
 | `npm run lint` | ESLint (zero-warnings policy) |
 | `npm test` | Vitest + React Testing Library (unit + integration) |
@@ -28,9 +37,9 @@ Open **http://localhost:5173**.
 
 ## Tech stack
 
-Vite · React 18 · TypeScript (strict) · Tailwind CSS · Context API + `useReducer` · Vitest + React Testing Library · ESLint + Prettier · npm
+Vite · React 18 · TypeScript (strict) · Tailwind CSS · Context API + `useReducer` · Express (catalog API) · Vitest + React Testing Library · ESLint + Prettier · npm
 
-**No** Redux, Zustand, Jotai, date/money libraries, or UI kits. Only the approved dependencies from the frozen spec.
+**No** Redux, Zustand, Jotai, date/money libraries, or UI kits — plain React + Tailwind.
 
 ## Architecture
 
@@ -50,12 +59,26 @@ src/
   types/          catalog.ts, state.ts
   hooks/          usePersistBundle.ts
   styles/         index.css (Tailwind + @font-face)
+server/           index.mjs — Express catalog API (bonus)
 tests/            mirrors src — unit + integration tests
 ```
 
+### Backend / API (bonus)
+
+The catalog is served from a small **Express** API (`server/index.mjs`):
+
+- `GET /api/catalog` → the product catalog JSON.
+- In production (`npm start`) the same process also serves the built `dist/`, so
+  the whole app runs from one Node server with SPA deep-link fallback.
+
+On startup `main.tsx` calls `loadCatalog()`, which fetches `/api/catalog` (with a
+3s timeout) and populates the data layer. If the API is unreachable it **falls back
+to the bundled `catalog.json`**, so the UI always works from a clean clone. The
+catalog file is the single source of truth for both the client bundle and the API.
+
 ### Data flow
 
-1. **`catalog.json`** → `dataAccess.ts` — single source of truth for products, prices, variants.
+1. **`GET /api/catalog`** (Express) → `loadCatalog()` → `dataAccess.ts` cache — single source of truth for products, prices, variants (falls back to bundled `catalog.json`).
 2. **`createSeedState()`** → `bundleReducer` — initial quantities, active variants, plan selection.
 3. **User actions** → dispatch → `bundleReducer` enforces invariants (clamping, required/fixed guards, variant independence, single-open accordion).
 4. **`selectors.ts`** derives review groups & totals from state + catalog (pure functions).
@@ -90,14 +113,19 @@ tests/            mirrors src — unit + integration tests
 - **Focus ring:** `:focus-visible` → 2px purple outline on all interactive elements.
 - **Colour contrast:** Purple (`#4E2FD2`) on white passes AAA. Muted greys (`#575757`, `#6F7882`) on white/lavender (`#ECEEFD`) pass AA for their text sizes.
 
-## API-readiness
+## Data layer
 
-The data layer (`dataAccess.ts`) exposes an `async getCatalog(): Promise<Product[]>` function. Today it resolves the bundled JSON synchronously. Swapping to a `fetch('/api/catalog')` call is a one-line change — the rest of the app is already async-tolerant. Image URLs are resolved through `resolveAssetUrl(filename)`, centralised for a CDN swap.
+`dataAccess.ts` is the single seam between the app and its data. `loadCatalog()`
+fetches the catalog from the Express API at startup and caches it; `getCatalogSync()`
+serves that cache to components and selectors. Image URLs resolve through
+`resolveAssetUrl(filename)`, centralised for a CDN swap.
 
 ## Deploy
 
-```bash
-npm run build   # → dist/
-```
+Two options:
 
-`dist/` is a static SPA — deploy to any static host (Vercel, Netlify, Cloudflare Pages, S3+CloudFront). No server, no SSR, no environment variables required.
+- **Full-stack (Node):** `npm run build && npm start` — Express serves the API and the
+  built SPA together on one port.
+- **Static only:** deploy `dist/` to any static host (Vercel, Netlify, Cloudflare Pages,
+  S3+CloudFront). With no API present, the client falls back to the bundled catalog, so
+  the app still works — the API is a bonus, not a hard dependency.

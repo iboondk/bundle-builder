@@ -1,7 +1,8 @@
 /**
  * Data-access layer — the single seam between the app and its data source.
- * Today it reads a bundled local JSON file; because the surface is async, swapping to a
- * REST/serverless API later is a one-line change here.
+ * The app fetches the catalog from the backend API (`GET /api/catalog`, see
+ * server/index.mjs) at startup via `loadCatalog()`, and falls back to the bundled
+ * JSON if the API is unreachable so the UI never breaks.
  * See public/assets/README.md for the asset layout.
  */
 
@@ -21,13 +22,34 @@ export function resolveAssetUrl(ref: string): string {
   return ref.includes('/') ? `/assets/${ref}` : `${ASSET_BASE}/${ref}`;
 }
 
-/** The typed product catalog. Imported JSON is validated by the type guard below in tests. */
-const catalog = rawCatalog as Product[];
+/**
+ * Module-level catalog cache. Seeded with the bundled JSON so synchronous accessors
+ * (and the test suite) always have data; `loadCatalog()` replaces it with the API
+ * response at startup.
+ */
+let catalog = rawCatalog as Product[];
 
 /**
- * Returns the full product catalog. Async by design so a future implementation can be:
- *   `return (await fetch('/api/catalog')).json();`
+ * Fetch the catalog from the backend API and populate the cache. Called once from
+ * `main.tsx` before the app renders. On any failure (API down, timeout, bad payload)
+ * it keeps the bundled fallback, so the UI still works from a clean clone.
  */
+export async function loadCatalog(): Promise<Product[]> {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000);
+    const res = await fetch('/api/catalog', { signal: controller.signal });
+    clearTimeout(timeout);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = (await res.json()) as Product[];
+    if (Array.isArray(data) && data.length > 0) catalog = data;
+  } catch {
+    // Keep the bundled fallback already in `catalog`.
+  }
+  return catalog;
+}
+
+/** Returns the full product catalog (from the cache populated by `loadCatalog`). */
 export async function getCatalog(): Promise<Product[]> {
   return Promise.resolve(catalog);
 }

@@ -13,6 +13,10 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
+    // Proxy the catalog API to the Express server (see server/index.mjs) in dev.
+    proxy: {
+      '/api': 'http://localhost:3001',
+    },
   },
   test: {
     globals: true,
