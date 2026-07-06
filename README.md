@@ -8,7 +8,7 @@ A single-page **Bundle Builder** for assembling a home-security system. Left: a 
 
 ```bash
 git clone <this-repo>
-cd frontend_test_41889
+cd bundle-builder
 npm install
 npm run dev
 ```
