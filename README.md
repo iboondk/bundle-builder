@@ -1,7 +1,9 @@
 # Bundle Builder — Wyze Home Security
 
 A single-page **Bundle Builder** for assembling a home-security system. Left: a 4-step accordion to pick cameras, a plan, sensors, and accessories. Right: a live review panel ("Your security system") with totals, savings, and financing that recalculate in real time. State persists to `localStorage` and restores on reload.
-https://bundle-builder-puce.vercel.app/
+
+**🔗 Live demo:** https://bundle-builder-puce.vercel.app/
+
 ---
 
 ## Quick start
