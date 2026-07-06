@@ -1,0 +1,178 @@
+[
+  {
+    "id": "wyze-cam-v4",
+    "category": "camera",
+    "stepId": "cameras",
+    "name": "Wyze Cam v4",
+    "description": "The clearest Wyze Cam ever made.",
+    "learnMoreUrl": "#",
+    "image": "wyze-cam-v4.png",
+    "badge": "Save 22%",
+    "price": {
+      "compareAt": 3598,
+      "current": 2798
+    },
+    "variants": [
+      {
+        "id": "white",
+        "label": "White",
+        "swatchImage": "swatches/wyze-cam-v4-white.png"
+      },
+      {
+        "id": "grey",
+        "label": "Grey",
+        "swatchImage": "swatches/wyze-cam-v4-grey.png"
+      },
+      {
+        "id": "black",
+        "label": "Black",
+        "swatchImage": "swatches/wyze-cam-v4-black.png"
+      }
+    ]
+  },
+  {
+    "id": "wyze-cam-pan-v3",
+    "category": "camera",
+    "stepId": "cameras",
+    "name": "Wyze Cam Pan v3",
+    "description": "360\u00b0 pan and 180\u00b0 tilt security camera.",
+    "learnMoreUrl": "#",
+    "image": "wyze-cam-pan-v3.png",
+    "badge": "Save 12%",
+    "price": {
+      "compareAt": 3998,
+      "current": 3498
+    },
+    "variants": [
+      {
+        "id": "white",
+        "label": "White",
+        "swatchImage": "swatches/wyze-cam-pan-v3-white.png"
+      },
+      {
+        "id": "black",
+        "label": "Black",
+        "swatchImage": "swatches/wyze-cam-pan-v3-black.png"
+      }
+    ]
+  },
+  {
+    "id": "wyze-cam-floodlight-v2",
+    "category": "camera",
+    "stepId": "cameras",
+    "name": "Wyze Cam Floodlight v2",
+    "description": "2K floodlight camera with a 160\u00b0 wide-angle view for your garage.",
+    "learnMoreUrl": "#",
+    "image": "wyze-cam-floodlight-v2.png",
+    "badge": "Save 22%",
+    "price": {
+      "compareAt": 8998,
+      "current": 6998
+    },
+    "variants": [
+      {
+        "id": "white",
+        "label": "White",
+        "swatchImage": "swatches/wyze-cam-floodlight-v2-white.png"
+      },
+      {
+        "id": "black",
+        "label": "Black",
+        "swatchImage": "swatches/wyze-cam-floodlight-v2-black.png"
+      }
+    ]
+  },
+  {
+    "id": "wyze-duo-cam-doorbell",
+    "category": "camera",
+    "stepId": "cameras",
+    "name": "Wyze Duo Cam Doorbell",
+    "description": "Two cameras. Two views. Double the porch protection.",
+    "learnMoreUrl": "#",
+    "image": "wyze-duo-cam-doorbell.png",
+    "price": {
+      "current": 6998
+    }
+  },
+  {
+    "id": "wyze-battery-cam-pro",
+    "category": "camera",
+    "stepId": "cameras",
+    "name": "Wyze Battery Cam Pro",
+    "description": "Protect anywhere. See everything in 2.5K HDR. No power outlet or electrician needed.",
+    "learnMoreUrl": "#",
+    "image": "wyze-battery-cam-pro.png",
+    "price": {
+      "current": 8998
+    },
+    "variants": [
+      {
+        "id": "white",
+        "label": "White",
+        "swatchImage": "swatches/wyze-battery-cam-pro-white.png"
+      },
+      {
+        "id": "black",
+        "label": "Black",
+        "swatchImage": "swatches/wyze-battery-cam-pro-black.png"
+      }
+    ]
+  },
+  {
+    "id": "cam-unlimited",
+    "category": "plan",
+    "stepId": "plan",
+    "selectByOne": true,
+    "name": "Cam Unlimited",
+    "image": "icons/step-plan.svg",
+    "price": {
+      "compareAt": 1299,
+      "current": 999,
+      "suffix": "/mo"
+    }
+  },
+  {
+    "id": "wyze-sense-motion",
+    "category": "sensor",
+    "stepId": "sensors",
+    "name": "Wyze Sense Motion Sensor",
+    "image": "wyze-sense-motion.png",
+    "price": {
+      "current": 2999
+    }
+  },
+  {
+    "id": "wyze-sense-hub",
+    "category": "sensor",
+    "stepId": "sensors",
+    "required": true,
+    "name": "Wyze Sense Hub (Required)",
+    "image": "wyze-sense-hub.png",
+    "price": {
+      "compareAt": 2992,
+      "current": 0
+    }
+  },
+  {
+    "id": "wyze-microsd-256",
+    "category": "accessory",
+    "stepId": "protection",
+    "name": "Wyze MicroSD Card (256GB)",
+    "image": "wyze-microsd-256.png",
+    "price": {
+      "current": 2098
+    }
+  },
+  {
+    "id": "fast-shipping",
+    "category": "shipping",
+    "fixed": true,
+    "countsTowardSavings": false,
+    "name": "Fast Shipping",
+    "image": "fast-shipping.png",
+    "price": {
+      "compareAt": 599,
+      "current": 0
+    }
+  }
+]

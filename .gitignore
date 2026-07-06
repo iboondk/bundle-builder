@@ -1,0 +1,28 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+dist-ssr
+*.tsbuildinfo
+
+# Local env / caches
+*.local
+.vite
+coverage
+*.log
+
+# Editor / OS
+.DS_Store
+.idea
+.vscode
+
+# Design scratch (regenerate from Figma; never ship)
+/*.png
+*.zip
+
+# Internal build harness — kept locally, excluded from the public submission
+/docs/
+/CLAUDE.md
+/AGENTS.md
+/.claude/
