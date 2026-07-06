@@ -1,4 +1,4 @@
-import { useMemo, useId } from 'react';
+import { useEffect, useMemo, useId, useRef } from 'react';
 import type { StepId } from '@/types/catalog';
 import { useBundle, useBundleDispatch } from '@/state/BundleContext';
 import { getStepSelectedCount } from '@/state/selectors';
@@ -41,8 +41,16 @@ function AccordionStep({ stepMeta, stepIndex }: AccordionStepProps) {
   const catalog = useMemo(() => getCatalogSync(), []);
   const panelId = useId();
   const headerId = useId();
+  const panelRef = useRef<HTMLDivElement>(null);
 
   const isExpanded = state.expandedStepId === stepMeta.stepId;
+
+  // Collapsed panels stay in the DOM for the open/close animation but are visually
+  // hidden; mark them `inert` so their controls are not keyboard-focusable or
+  // exposed to assistive tech while collapsed.
+  useEffect(() => {
+    if (panelRef.current) panelRef.current.inert = !isExpanded;
+  }, [isExpanded]);
   const selectedCount = getStepSelectedCount(state, stepMeta.stepId, catalog);
 
   // Products belonging to this step.
@@ -91,6 +99,7 @@ function AccordionStep({ stepMeta, stepIndex }: AccordionStepProps) {
 
         {/* Collapsible panel with smooth open/close animation */}
         <div
+          ref={panelRef}
           id={panelId}
           role="region"
           aria-labelledby={headerId}
